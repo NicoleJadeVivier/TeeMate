@@ -50,6 +50,7 @@ export default function ProfileEdit() {
           onSubmit={handleSubmit}
           submitLabel="Save changes"
           submittingLabel="Saving…"
+          onCancel={() => navigate(`/profile/${user.id}`)}
         />
       </div>
     </div>

@@ -173,6 +173,30 @@ button[type='submit']:hover:not(:disabled) {
   background: var(--fairway-900);
 }
 
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cancel-btn {
+  background: none;
+  border: 1px solid var(--sand-200);
+  color: var(--bunker-800);
+  padding: 11px 18px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 6px;
+}
+.cancel-btn:hover:not(:disabled) {
+  background: var(--sand-100);
+}
+.cancel-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
 /* ---------------- Forms ---------------- */
 .auth-page {
   min-height: 100vh;

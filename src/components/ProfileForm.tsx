@@ -24,6 +24,7 @@ interface ProfileFormProps {
   onSubmit: (values: ProfileFormValues) => Promise<{ error: string | null }>
   submitLabel: string
   submittingLabel: string
+  onCancel?: () => void
 }
 
 export default function ProfileForm({
@@ -31,6 +32,7 @@ export default function ProfileForm({
   onSubmit,
   submitLabel,
   submittingLabel,
+  onCancel,
 }: ProfileFormProps) {
   const [role, setRole] = useState<Role>(initialValues.role)
   const [fullName, setFullName] = useState(initialValues.fullName)
@@ -211,9 +213,16 @@ export default function ProfileForm({
         </div>
       </label>
       {error && <p className="form-error">{error}</p>}
-      <button type="submit" disabled={submitting}>
-        {submitting ? submittingLabel : submitLabel}
-      </button>
+      <div className="form-actions">
+        <button type="submit" disabled={submitting}>
+          {submitting ? submittingLabel : submitLabel}
+        </button>
+        {onCancel && (
+          <button type="button" className="cancel-btn" onClick={onCancel} disabled={submitting}>
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   )
 }
