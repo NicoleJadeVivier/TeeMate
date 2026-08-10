@@ -378,19 +378,82 @@ button[type='submit']:hover:not(:disabled) {
 }
 
 .schedule-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   background: #fff;
   border: 1px solid var(--sand-200);
   border-radius: 10px;
   padding: 16px 20px;
 }
 
+.schedule-row-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.schedule-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 .schedule-dates {
   color: #6b6252;
   font-size: 0.9rem;
   white-space: nowrap;
+}
+
+.commit-btn {
+  border: 1px solid var(--fairway-700);
+  background: #fff;
+  color: var(--fairway-700);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.commit-btn:hover:not(:disabled) {
+  background: var(--sand-100);
+}
+.commit-btn.committed {
+  background: var(--fairway-700);
+  color: #fff;
+}
+.commit-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.commitments-toggle {
+  background: none;
+  border: none;
+  color: var(--fairway-700);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 10px 0 0;
+  margin: 0;
+}
+
+.committed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--sand-200);
+}
+
+.committed-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.committed-name {
+  flex: 1;
+  font-size: 0.92rem;
 }
 
 /* ---------------- Messages ---------------- */

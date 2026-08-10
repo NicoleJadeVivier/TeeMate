@@ -36,6 +36,15 @@ export interface Post {
   tournament?: Tournament
 }
 
+export interface Commitment {
+  id: string
+  user_id: string
+  tournament_id: string
+  created_at: string
+  // Joined field, populated client-side
+  profile?: Profile
+}
+
 export interface Message {
   id: string
   thread_id: string
