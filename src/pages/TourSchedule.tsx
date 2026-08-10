@@ -80,6 +80,74 @@ export default function TourSchedule() {
     setPendingId(null)
   }
 
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const renderRow = (t: Tournament) => {
+    const commitments = commitmentsByTournament[t.id] ?? []
+    const isCommitted = commitments.some((c) => c.user_id === user?.id)
+    const isExpanded = expanded.has(t.id)
+    const isPast = new Date(t.end_date) < today
+
+    return (
+      <div className="schedule-row" key={t.id}>
+        <div className="schedule-row-main">
+          <div>
+            <h3>{t.name}</h3>
+            <p className="post-meta">{t.location}</p>
+          </div>
+          <div className="schedule-row-actions">
+            <div className="schedule-dates">
+              {new Date(t.start_date).toLocaleDateString()} –{' '}
+              {new Date(t.end_date).toLocaleDateString()}
+            </div>
+            {!isPast && (
+              <button
+                className={isCommitted ? 'commit-btn committed' : 'commit-btn'}
+                disabled={pendingId === t.id}
+                onClick={() => handleToggleCommit(t.id, isCommitted)}
+              >
+                {isCommitted ? 'Committed ✓' : 'Commit'}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <button className="commitments-toggle" onClick={() => toggleExpanded(t.id)}>
+          {commitments.length === 0 ? 'No one committed yet' : `${commitments.length} committed`}{' '}
+          {isExpanded ? '▲' : '▼'}
+        </button>
+
+        {isExpanded && commitments.length > 0 && (
+          <div className="committed-list">
+            {commitments.map((c) => (
+              <div className="committed-row" key={c.id}>
+                <span
+                  className={
+                    c.profile?.role === 'caddie' ? 'badge badge-caddie' : 'badge badge-player'
+                  }
+                >
+                  {c.profile?.role}
+                </span>
+                <Link to={`/profile/${c.user_id}`} className="committed-name">
+                  {c.profile?.full_name ?? 'Unknown'}
+                </Link>
+                {c.user_id !== user?.id && (
+                  <Link to={`/messages/${c.user_id}`} className="message-link">
+                    Message
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const upcoming = tournaments.filter((t) => new Date(t.end_date) >= today)
+  const past = tournaments.filter((t) => new Date(t.end_date) < today).reverse()
+
   return (
     <div className="page">
       <div className="page-header">
@@ -109,68 +177,21 @@ export default function TourSchedule() {
           to populate this schedule.
         </p>
       ) : (
-        <div className="schedule-list">
-          {tournaments.map((t) => {
-            const commitments = commitmentsByTournament[t.id] ?? []
-            const isCommitted = commitments.some((c) => c.user_id === user?.id)
-            const isExpanded = expanded.has(t.id)
+        <>
+          <h2 className="section-heading">Upcoming</h2>
+          {upcoming.length === 0 ? (
+            <p className="empty-state">No upcoming {tour} events.</p>
+          ) : (
+            <div className="schedule-list">{upcoming.map(renderRow)}</div>
+          )}
 
-            return (
-              <div className="schedule-row" key={t.id}>
-                <div className="schedule-row-main">
-                  <div>
-                    <h3>{t.name}</h3>
-                    <p className="post-meta">{t.location}</p>
-                  </div>
-                  <div className="schedule-row-actions">
-                    <div className="schedule-dates">
-                      {new Date(t.start_date).toLocaleDateString()} –{' '}
-                      {new Date(t.end_date).toLocaleDateString()}
-                    </div>
-                    <button
-                      className={isCommitted ? 'commit-btn committed' : 'commit-btn'}
-                      disabled={pendingId === t.id}
-                      onClick={() => handleToggleCommit(t.id, isCommitted)}
-                    >
-                      {isCommitted ? 'Committed ✓' : 'Commit'}
-                    </button>
-                  </div>
-                </div>
-
-                <button className="commitments-toggle" onClick={() => toggleExpanded(t.id)}>
-                  {commitments.length === 0
-                    ? 'No one committed yet'
-                    : `${commitments.length} committed`}{' '}
-                  {isExpanded ? '▲' : '▼'}
-                </button>
-
-                {isExpanded && commitments.length > 0 && (
-                  <div className="committed-list">
-                    {commitments.map((c) => (
-                      <div className="committed-row" key={c.id}>
-                        <span
-                          className={
-                            c.profile?.role === 'caddie' ? 'badge badge-caddie' : 'badge badge-player'
-                          }
-                        >
-                          {c.profile?.role}
-                        </span>
-                        <Link to={`/profile/${c.user_id}`} className="committed-name">
-                          {c.profile?.full_name ?? 'Unknown'}
-                        </Link>
-                        {c.user_id !== user?.id && (
-                          <Link to={`/messages/${c.user_id}`} className="message-link">
-                            Message
-                          </Link>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })}
-        </div>
+          {past.length > 0 && (
+            <>
+              <h2 className="section-heading">Past</h2>
+              <div className="schedule-list">{past.map(renderRow)}</div>
+            </>
+          )}
+        </>
       )}
     </div>
   )
