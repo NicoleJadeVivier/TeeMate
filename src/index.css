@@ -589,6 +589,12 @@ button[type='submit']:hover:not(:disabled) {
   border-top: 1px solid var(--sand-200);
 }
 
+.committed-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
 .committed-row {
   display: flex;
   align-items: center;

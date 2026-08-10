@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
-import type { Commitment, Tour, Tournament } from '../lib/types'
+import type { Commitment, Role, Tour, Tournament } from '../lib/types'
 
 const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
 
@@ -14,6 +14,7 @@ export default function TourSchedule() {
     Record<string, Commitment[]>
   >({})
   const [expanded, setExpanded] = useState<Set<string>>(new Set())
+  const [committedTab, setCommittedTab] = useState<Record<string, Role>>({})
   const [pendingId, setPendingId] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -88,6 +89,10 @@ export default function TourSchedule() {
     const isCommitted = commitments.some((c) => c.user_id === user?.id)
     const isExpanded = expanded.has(t.id)
     const isPast = new Date(t.end_date) < today
+    const activeTab = committedTab[t.id] ?? 'player'
+    const players = commitments.filter((c) => c.profile?.role === 'player')
+    const caddies = commitments.filter((c) => c.profile?.role === 'caddie')
+    const visibleCommitments = activeTab === 'player' ? players : caddies
 
     return (
       <div className="schedule-row" key={t.id}>
@@ -120,25 +125,40 @@ export default function TourSchedule() {
 
         {isExpanded && commitments.length > 0 && (
           <div className="committed-list">
-            {commitments.map((c) => (
-              <div className="committed-row" key={c.id}>
-                <span
-                  className={
-                    c.profile?.role === 'caddie' ? 'badge badge-caddie' : 'badge badge-player'
-                  }
-                >
-                  {c.profile?.role}
-                </span>
-                <Link to={`/profile/${c.user_id}`} className="committed-name">
-                  {c.profile?.full_name ?? 'Unknown'}
-                </Link>
-                {c.user_id !== user?.id && (
-                  <Link to={`/messages/${c.user_id}`} className="message-link">
-                    Message
+            <div className="committed-tabs">
+              <button
+                type="button"
+                className={activeTab === 'player' ? 'role-btn active' : 'role-btn'}
+                onClick={() => setCommittedTab((prev) => ({ ...prev, [t.id]: 'player' }))}
+              >
+                Players ({players.length})
+              </button>
+              <button
+                type="button"
+                className={activeTab === 'caddie' ? 'role-btn active' : 'role-btn'}
+                onClick={() => setCommittedTab((prev) => ({ ...prev, [t.id]: 'caddie' }))}
+              >
+                Caddies ({caddies.length})
+              </button>
+            </div>
+            {visibleCommitments.length === 0 ? (
+              <p className="form-hint">
+                No {activeTab === 'player' ? 'players' : 'caddies'} committed yet.
+              </p>
+            ) : (
+              visibleCommitments.map((c) => (
+                <div className="committed-row" key={c.id}>
+                  <Link to={`/profile/${c.user_id}`} className="committed-name">
+                    {c.profile?.full_name ?? 'Unknown'}
                   </Link>
-                )}
-              </div>
-            ))}
+                  {c.user_id !== user?.id && (
+                    <Link to={`/messages/${c.user_id}`} className="message-link">
+                      Message
+                    </Link>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>
