@@ -487,6 +487,14 @@ button[type='submit']:hover:not(:disabled) {
   height: calc(100vh - 180px);
 }
 
+.back-link {
+  color: var(--fairway-700);
+  font-size: 0.9rem;
+  text-decoration: none;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
 .message-list {
   flex: 1;
   overflow-y: auto;

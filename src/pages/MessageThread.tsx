@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import type { Message, Profile } from '../lib/types'
@@ -78,6 +78,9 @@ export default function MessageThread() {
 
   return (
     <div className="page page-narrow thread-page">
+      <Link to="/messages" className="back-link">
+        ← Inbox
+      </Link>
       <h1>{otherUser?.full_name ?? 'Conversation'}</h1>
 
       <div className="message-list">
