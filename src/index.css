@@ -358,6 +358,7 @@ button[type='submit']:hover:not(:disabled) {
   display: inline-flex;
   align-items: center;
   line-height: 0;
+  text-decoration: none;
 }
 .icon-btn:hover {
   color: var(--flag-600);

@@ -7,7 +7,7 @@ import ProfileSetup from './pages/ProfileSetup'
 import ProfileEdit from './pages/ProfileEdit'
 import ProfileView from './pages/ProfileView'
 import Feed from './pages/Feed'
-import NewPost from './pages/NewPost'
+import PostForm from './pages/PostForm'
 import TourSchedule from './pages/TourSchedule'
 import MessagesList from './pages/MessagesList'
 import MessageThread from './pages/MessageThread'
@@ -33,7 +33,15 @@ export default function App() {
             path="/new-post"
             element={
               <ProtectedRoute>
-                <NewPost />
+                <PostForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/posts/:postId/edit"
+            element={
+              <ProtectedRoute>
+                <PostForm />
               </ProtectedRoute>
             }
           />
