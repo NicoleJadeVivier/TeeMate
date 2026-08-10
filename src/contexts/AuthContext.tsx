@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabaseClient'
 import type { Profile } from '../lib/types'
@@ -18,10 +18,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [loading, setLoading] = useState(true)
+  const loadedProfileUserId = useRef<string | null>(null)
 
   const loadProfile = async (userId: string) => {
     const { data } = await supabase.from('profiles').select('*').eq('id', userId).single()
     setProfile(data as Profile | null)
+    loadedProfileUserId.current = userId
   }
 
   useEffect(() => {
@@ -34,9 +36,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       if (session?.user) {
-        loadProfile(session.user.id)
+        // Skip refetching (and the loading flash that would cause) when
+        // this event just re-confirms the user we already have loaded,
+        // e.g. a token refresh. Only block on a real profile fetch when
+        // the signed-in user has actually changed — sign-in, switching
+        // accounts — so ProtectedRoute never sees a stale null profile
+        // and bounces someone to /setup-profile who already has one.
+        if (loadedProfileUserId.current !== session.user.id) {
+          setLoading(true)
+          loadProfile(session.user.id).finally(() => setLoading(false))
+        }
       } else {
         setProfile(null)
+        loadedProfileUserId.current = null
       }
     })
 
