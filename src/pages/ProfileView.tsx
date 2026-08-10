@@ -135,52 +135,56 @@ export default function ProfileView() {
         </>
       )}
 
-      <h3>Results</h3>
-      {isSelf && (
-        <div className="sync-row">
-          {profile.pga_tour_player_url ? (
-            <button type="button" className="commit-btn" onClick={handleSync} disabled={syncing}>
-              {syncing ? 'Syncing…' : 'Sync results'}
-            </button>
-          ) : (
-            <p className="form-hint">
-              Add your PGA Tour player page URL in <Link to="/profile/edit">Edit profile</Link> to
-              sync real results.
-            </p>
+      {profile.role === 'player' && (
+        <>
+          <h3>Results</h3>
+          {isSelf && (
+            <div className="sync-row">
+              {profile.pga_tour_player_url ? (
+                <button type="button" className="commit-btn" onClick={handleSync} disabled={syncing}>
+                  {syncing ? 'Syncing…' : 'Sync results'}
+                </button>
+              ) : (
+                <p className="form-hint">
+                  Add your PGA Tour player page URL in <Link to="/profile/edit">Edit profile</Link>{' '}
+                  to sync real results.
+                </p>
+              )}
+              {syncError && <p className="form-error">{syncError}</p>}
+            </div>
           )}
-          {syncError && <p className="form-error">{syncError}</p>}
-        </div>
-      )}
-      {results.length === 0 ? (
-        <p className="empty-state">No synced results yet.</p>
-      ) : (
-        <div className="results-table-wrap">
-          <table className="results-table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Tournament</th>
-                <th>Pos</th>
-                <th>Score</th>
-                <th>Earnings</th>
-              </tr>
-            </thead>
-            <tbody>
-              {results.map((r) => (
-                <tr key={r.id}>
-                  <td>{r.event_date ? new Date(r.event_date).toLocaleDateString() : '—'}</td>
-                  <td>{r.tournament_name}</td>
-                  <td>{r.position ?? '—'}</td>
-                  <td>
-                    {r.total_score ?? '—'}
-                    {r.to_par ? ` (${r.to_par})` : ''}
-                  </td>
-                  <td>{r.earnings ?? '—'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          {results.length === 0 ? (
+            <p className="empty-state">No synced results yet.</p>
+          ) : (
+            <div className="results-table-wrap">
+              <table className="results-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Tournament</th>
+                    <th>Pos</th>
+                    <th>Score</th>
+                    <th>Earnings</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((r) => (
+                    <tr key={r.id}>
+                      <td>{r.event_date ? new Date(r.event_date).toLocaleDateString() : '—'}</td>
+                      <td>{r.tournament_name}</td>
+                      <td>{r.position ?? '—'}</td>
+                      <td>
+                        {r.total_score ?? '—'}
+                        {r.to_par ? ` (${r.to_par})` : ''}
+                      </td>
+                      <td>{r.earnings ?? '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
       )}
 
       <h3>Tournaments committed to</h3>

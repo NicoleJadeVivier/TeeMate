@@ -185,18 +185,20 @@ export default function ProfileForm({
         />
         <span className="form-hint">One highlight per line — each shows as its own bullet.</span>
       </label>
-      <label>
-        PGA Tour player page URL
-        <input
-          type="url"
-          value={pgaTourPlayerUrl}
-          onChange={(e) => setPgaTourPlayerUrl(e.target.value)}
-          placeholder="https://www.pgatour.com/korn-ferry-tour/player/12345/your-name"
-        />
-        <span className="form-hint">
-          If you're a competitive player, add your pgatour.com player page to sync real results.
-        </span>
-      </label>
+      {role === 'player' && (
+        <label>
+          PGA Tour player page URL
+          <input
+            type="url"
+            value={pgaTourPlayerUrl}
+            onChange={(e) => setPgaTourPlayerUrl(e.target.value)}
+            placeholder="https://www.pgatour.com/korn-ferry-tour/player/12345/your-name"
+          />
+          <span className="form-hint">
+            Add your pgatour.com player page to sync real results.
+          </span>
+        </label>
+      )}
       <label>
         Tours you follow
         <div className="tour-toggle">
