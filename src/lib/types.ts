@@ -11,6 +11,7 @@ export interface Profile {
   location: string | null
   years_experience: number | null
   preferred_tours: Tour[]
+  career_highlights: string | null
   created_at: string
 }
 
@@ -41,8 +42,9 @@ export interface Commitment {
   user_id: string
   tournament_id: string
   created_at: string
-  // Joined field, populated client-side
+  // Joined fields, populated client-side
   profile?: Profile
+  tournament?: Tournament
 }
 
 export interface Message {

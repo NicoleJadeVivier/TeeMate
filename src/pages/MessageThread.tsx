@@ -81,7 +81,13 @@ export default function MessageThread() {
       <Link to="/messages" className="back-link">
         ← Inbox
       </Link>
-      <h1>{otherUser?.full_name ?? 'Conversation'}</h1>
+      {otherUserId ? (
+        <Link to={`/profile/${otherUserId}`} className="thread-title-link">
+          <h1>{otherUser?.full_name ?? 'Conversation'}</h1>
+        </Link>
+      ) : (
+        <h1>{otherUser?.full_name ?? 'Conversation'}</h1>
+      )}
 
       <div className="message-list">
         {messages.map((m) => (

@@ -85,6 +85,10 @@ h1, h2, h3 {
 .navbar-name {
   font-size: 0.9rem;
   color: var(--sand-200);
+  text-decoration: none;
+}
+.navbar-name:hover {
+  text-decoration: underline;
 }
 
 .ghost-btn {
@@ -454,6 +458,45 @@ button[type='submit']:hover:not(:disabled) {
 .committed-name {
   flex: 1;
   font-size: 0.92rem;
+  color: inherit;
+  text-decoration: none;
+}
+.committed-name:hover {
+  text-decoration: underline;
+}
+
+/* ---------------- Profile ---------------- */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.profile-header .badge {
+  margin-bottom: 8px;
+  display: inline-block;
+}
+
+.tag-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 10px 0;
+}
+
+.tag {
+  background: var(--sand-200);
+  color: var(--bunker-800);
+  font-size: 0.82rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.thread-title-link {
+  text-decoration: none;
 }
 
 /* ---------------- Messages ---------------- */

@@ -26,7 +26,14 @@ export default function PostCard({ post, currentUserId }: { post: Post; currentU
 
       <div className="post-card-footer">
         <span className="post-author">
-          Posted by {post.author?.full_name ?? 'Unknown'}
+          Posted by{' '}
+          {post.author ? (
+            <Link to={`/profile/${post.author_id}`} className="message-link">
+              {post.author.full_name}
+            </Link>
+          ) : (
+            'Unknown'
+          )}
           {post.author?.location ? ` · ${post.author.location}` : ''}
         </span>
         {!isOwnPost && (

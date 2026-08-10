@@ -13,6 +13,7 @@ create table if not exists profiles (
   location text,
   years_experience int,
   preferred_tours text[] default '{}', -- e.g. {'PGA','Korn Ferry','Americas'}
+  career_highlights text,
   created_at timestamptz not null default now()
 );
 

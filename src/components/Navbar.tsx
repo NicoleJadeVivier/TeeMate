@@ -1,8 +1,8 @@
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 
 export default function Navbar() {
-  const { profile, signOut } = useAuth()
+  const { user, profile, signOut } = useAuth()
 
   return (
     <nav className="navbar">
@@ -19,7 +19,11 @@ export default function Navbar() {
         </NavLink>
       </div>
       <div className="navbar-user">
-        {profile && <span className="navbar-name">{profile.full_name}</span>}
+        {profile && (
+          <Link to={`/profile/${user?.id}`} className="navbar-name">
+            {profile.full_name}
+          </Link>
+        )}
         <button className="ghost-btn" onClick={signOut}>
           Log out
         </button>

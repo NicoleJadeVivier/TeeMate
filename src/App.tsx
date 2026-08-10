@@ -4,6 +4,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import ProfileSetup from './pages/ProfileSetup'
+import ProfileEdit from './pages/ProfileEdit'
+import ProfileView from './pages/ProfileView'
 import Feed from './pages/Feed'
 import NewPost from './pages/NewPost'
 import TourSchedule from './pages/TourSchedule'
@@ -56,6 +58,22 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <MessageThread />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/edit"
+            element={
+              <ProtectedRoute>
+                <ProfileEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile/:userId"
+            element={
+              <ProtectedRoute>
+                <ProfileView />
               </ProtectedRoute>
             }
           />

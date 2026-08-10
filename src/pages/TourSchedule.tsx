@@ -155,7 +155,9 @@ export default function TourSchedule() {
                         >
                           {c.profile?.role}
                         </span>
-                        <span className="committed-name">{c.profile?.full_name ?? 'Unknown'}</span>
+                        <Link to={`/profile/${c.user_id}`} className="committed-name">
+                          {c.profile?.full_name ?? 'Unknown'}
+                        </Link>
                         {c.user_id !== user?.id && (
                           <Link to={`/messages/${c.user_id}`} className="message-link">
                             Message
