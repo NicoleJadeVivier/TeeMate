@@ -32,6 +32,10 @@ export default function Feed() {
     setLoading(false)
   }
 
+  const handleDeleted = (postId: string) => {
+    setPosts((prev) => prev.filter((p) => p.id !== postId))
+  }
+
   const filteredPosts = posts.filter((post) => {
     if (tourFilter !== 'all' && post.tournament?.tour !== tourFilter) return false
     if (typeFilter !== 'all' && post.post_type !== typeFilter) return false
@@ -82,7 +86,7 @@ export default function Feed() {
       ) : (
         <div className="post-grid">
           {filteredPosts.map((post) => (
-            <PostCard key={post.id} post={post} currentUserId={user?.id} />
+            <PostCard key={post.id} post={post} currentUserId={user?.id} onDeleted={handleDeleted} />
           ))}
         </div>
       )}
