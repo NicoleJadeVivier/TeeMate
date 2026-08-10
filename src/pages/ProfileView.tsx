@@ -74,7 +74,15 @@ export default function ProfileView() {
       {profile.career_highlights && (
         <>
           <h3>Career highlights</h3>
-          <p className="post-details">{profile.career_highlights}</p>
+          <ul className="highlight-list">
+            {profile.career_highlights
+              .split('\n')
+              .map((line) => line.trim())
+              .filter(Boolean)
+              .map((line, i) => (
+                <li key={i}>{line}</li>
+              ))}
+          </ul>
         </>
       )}
 

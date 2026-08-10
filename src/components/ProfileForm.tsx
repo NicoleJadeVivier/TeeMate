@@ -121,9 +121,12 @@ export default function ProfileForm({
         <textarea
           value={careerHighlights}
           onChange={(e) => setCareerHighlights(e.target.value)}
-          rows={3}
-          placeholder="Notable finishes, wins, memorable loops..."
+          rows={4}
+          placeholder={
+            'One per line, e.g.\nRunner-up, 2024 Q-School\n3 wins on the Korn Ferry Tour'
+          }
         />
+        <span className="form-hint">One highlight per line — each shows as its own bullet.</span>
       </label>
       <label>
         Tours you follow

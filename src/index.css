@@ -499,6 +499,18 @@ button[type='submit']:hover:not(:disabled) {
   text-decoration: none;
 }
 
+.highlight-list {
+  margin: 0 0 16px;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.highlight-list li {
+  font-size: 0.95rem;
+}
+
 /* ---------------- Messages ---------------- */
 .thread-list {
   display: flex;
