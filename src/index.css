@@ -622,6 +622,12 @@ button[type='submit']:hover:not(:disabled) {
   white-space: nowrap;
 }
 
+.results-table th:nth-child(2),
+.results-table td:nth-child(2) {
+  white-space: normal;
+  min-width: 220px;
+}
+
 .results-table th {
   background: var(--sand-100);
   color: #6b6252;

@@ -81,7 +81,7 @@ export default function ProfileView() {
   const isSelf = user?.id === profile.id
 
   return (
-    <div className="page page-narrow">
+    <div className="page">
       <div className="profile-header">
         <div className="profile-identity">
           <Avatar url={profile.avatar_url} name={profile.full_name} size={72} />
