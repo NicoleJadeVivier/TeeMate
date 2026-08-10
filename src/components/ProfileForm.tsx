@@ -1,7 +1,11 @@
-import { useState, type FormEvent } from 'react'
+import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { supabase } from '../lib/supabaseClient'
+import { useAuth } from '../contexts/AuthContext'
+import Avatar from './Avatar'
 import type { Role, Tour } from '../lib/types'
 
 const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
+const MAX_AVATAR_BYTES = 5 * 1024 * 1024
 
 export interface ProfileFormValues {
   role: Role
@@ -11,6 +15,7 @@ export interface ProfileFormValues {
   yearsExperience: string
   preferredTours: Tour[]
   careerHighlights: string
+  avatarUrl: string | null
 }
 
 interface ProfileFormProps {
@@ -33,13 +38,48 @@ export default function ProfileForm({
   const [yearsExperience, setYearsExperience] = useState(initialValues.yearsExperience)
   const [preferredTours, setPreferredTours] = useState<Tour[]>(initialValues.preferredTours)
   const [careerHighlights, setCareerHighlights] = useState(initialValues.careerHighlights)
+  const [avatarUrl, setAvatarUrl] = useState(initialValues.avatarUrl)
+  const [avatarError, setAvatarError] = useState<string | null>(null)
+  const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
+  const { user } = useAuth()
 
   const toggleTour = (tour: Tour) => {
     setPreferredTours((prev) =>
       prev.includes(tour) ? prev.filter((t) => t !== tour) : [...prev, tour]
     )
+  }
+
+  const handleAvatarChange = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !user) return
+
+    if (!file.type.startsWith('image/')) {
+      setAvatarError('Please choose an image file.')
+      return
+    }
+    if (file.size > MAX_AVATAR_BYTES) {
+      setAvatarError('Image must be smaller than 5MB.')
+      return
+    }
+
+    setAvatarError(null)
+    setUploadingAvatar(true)
+
+    const ext = file.name.split('.').pop() ?? 'jpg'
+    const path = `${user.id}/${Date.now()}.${ext}`
+    const { error: uploadError } = await supabase.storage.from('avatars').upload(path, file)
+
+    if (uploadError) {
+      setAvatarError(uploadError.message)
+      setUploadingAvatar(false)
+      return
+    }
+
+    const { data } = supabase.storage.from('avatars').getPublicUrl(path)
+    setAvatarUrl(data.publicUrl)
+    setUploadingAvatar(false)
   }
 
   const handleSubmit = async (e: FormEvent) => {
@@ -55,6 +95,7 @@ export default function ProfileForm({
       yearsExperience,
       preferredTours,
       careerHighlights,
+      avatarUrl,
     })
 
     setSubmitting(false)
@@ -63,6 +104,17 @@ export default function ProfileForm({
 
   return (
     <form onSubmit={handleSubmit} className="auth-form">
+      <label>
+        Profile photo
+        <div className="avatar-upload">
+          <Avatar url={avatarUrl} name={fullName || 'Me'} size={64} />
+          <div>
+            <input type="file" accept="image/*" onChange={handleAvatarChange} disabled={uploadingAvatar} />
+            {uploadingAvatar && <p className="form-hint">Uploading…</p>}
+            {avatarError && <p className="form-error">{avatarError}</p>}
+          </div>
+        </div>
+      </label>
       <label>
         I am a
         <div className="role-toggle">

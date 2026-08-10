@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import Avatar from './Avatar'
 
 export default function Navbar() {
   const { user, profile, signOut } = useAuth()
@@ -21,6 +22,7 @@ export default function Navbar() {
       <div className="navbar-user">
         {profile && (
           <Link to={`/profile/${user?.id}`} className="navbar-name">
+            <Avatar url={profile.avatar_url} name={profile.full_name} size={28} />
             {profile.full_name}
           </Link>
         )}

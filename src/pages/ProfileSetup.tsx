@@ -19,6 +19,7 @@ export default function ProfileSetup() {
       years_experience: values.yearsExperience ? Number(values.yearsExperience) : null,
       preferred_tours: values.preferredTours,
       career_highlights: values.careerHighlights || null,
+      avatar_url: values.avatarUrl,
     })
 
     if (error) return { error: error.message }
@@ -41,6 +42,7 @@ export default function ProfileSetup() {
             yearsExperience: '',
             preferredTours: [],
             careerHighlights: '',
+            avatarUrl: null,
           }}
           onSubmit={handleSubmit}
           submitLabel="Finish setup"

@@ -20,6 +20,7 @@ export default function ProfileEdit() {
         years_experience: values.yearsExperience ? Number(values.yearsExperience) : null,
         preferred_tours: values.preferredTours,
         career_highlights: values.careerHighlights || null,
+        avatar_url: values.avatarUrl,
       })
       .eq('id', user.id)
 
@@ -42,6 +43,7 @@ export default function ProfileEdit() {
             yearsExperience: profile.years_experience?.toString() ?? '',
             preferredTours: profile.preferred_tours,
             careerHighlights: profile.career_highlights ?? '',
+            avatarUrl: profile.avatar_url,
           }}
           onSubmit={handleSubmit}
           submitLabel="Save changes"

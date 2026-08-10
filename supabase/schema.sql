@@ -14,6 +14,7 @@ create table if not exists profiles (
   years_experience int,
   preferred_tours text[] default '{}', -- e.g. {'PGA','Korn Ferry','Americas'}
   career_highlights text,
+  avatar_url text,
   created_at timestamptz not null default now()
 );
 
@@ -116,6 +117,31 @@ create policy "Users can remove their own commitment"
 
 create index if not exists commitments_tournament_idx
   on commitments (tournament_id);
+
+-- ============================================================
+-- AVATARS
+-- Public storage bucket for profile photos, scoped so a user can
+-- only write files under their own user-id folder.
+-- ============================================================
+insert into storage.buckets (id, name, public)
+values ('avatars', 'avatars', true)
+on conflict (id) do nothing;
+
+create policy "Avatar images are publicly accessible"
+  on storage.objects for select
+  using (bucket_id = 'avatars');
+
+create policy "Users can upload their own avatar"
+  on storage.objects for insert
+  with check (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
+
+create policy "Users can update their own avatar"
+  on storage.objects for update
+  using (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
+
+create policy "Users can delete their own avatar"
+  on storage.objects for delete
+  using (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
 
 -- ============================================================
 -- MESSAGES

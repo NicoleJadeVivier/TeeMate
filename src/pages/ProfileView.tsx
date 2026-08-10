@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
+import Avatar from '../components/Avatar'
 import type { Commitment, Profile } from '../lib/types'
 
 export default function ProfileView() {
@@ -37,12 +38,15 @@ export default function ProfileView() {
   return (
     <div className="page page-narrow">
       <div className="profile-header">
-        <div>
-          <span className={profile.role === 'caddie' ? 'badge badge-caddie' : 'badge badge-player'}>
-            {profile.role}
-          </span>
-          <h1>{profile.full_name}</h1>
-          {profile.location && <p className="post-meta">{profile.location}</p>}
+        <div className="profile-identity">
+          <Avatar url={profile.avatar_url} name={profile.full_name} size={72} />
+          <div>
+            <span className={profile.role === 'caddie' ? 'badge badge-caddie' : 'badge badge-player'}>
+              {profile.role}
+            </span>
+            <h1>{profile.full_name}</h1>
+            {profile.location && <p className="post-meta">{profile.location}</p>}
+          </div>
         </div>
         {isSelf ? (
           <Link to="/profile/edit" className="primary-btn">

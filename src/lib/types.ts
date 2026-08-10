@@ -12,6 +12,7 @@ export interface Profile {
   years_experience: number | null
   preferred_tours: Tour[]
   career_highlights: string | null
+  avatar_url: string | null
   created_at: string
 }
 
