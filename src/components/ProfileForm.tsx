@@ -16,6 +16,7 @@ export interface ProfileFormValues {
   preferredTours: Tour[]
   careerHighlights: string
   avatarUrl: string | null
+  pgaTourPlayerUrl: string
 }
 
 interface ProfileFormProps {
@@ -39,6 +40,7 @@ export default function ProfileForm({
   const [preferredTours, setPreferredTours] = useState<Tour[]>(initialValues.preferredTours)
   const [careerHighlights, setCareerHighlights] = useState(initialValues.careerHighlights)
   const [avatarUrl, setAvatarUrl] = useState(initialValues.avatarUrl)
+  const [pgaTourPlayerUrl, setPgaTourPlayerUrl] = useState(initialValues.pgaTourPlayerUrl)
   const [avatarError, setAvatarError] = useState<string | null>(null)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -96,6 +98,7 @@ export default function ProfileForm({
       preferredTours,
       careerHighlights,
       avatarUrl,
+      pgaTourPlayerUrl,
     })
 
     setSubmitting(false)
@@ -179,6 +182,18 @@ export default function ProfileForm({
           }
         />
         <span className="form-hint">One highlight per line — each shows as its own bullet.</span>
+      </label>
+      <label>
+        PGA Tour player page URL
+        <input
+          type="url"
+          value={pgaTourPlayerUrl}
+          onChange={(e) => setPgaTourPlayerUrl(e.target.value)}
+          placeholder="https://www.pgatour.com/korn-ferry-tour/player/12345/your-name"
+        />
+        <span className="form-hint">
+          If you're a competitive player, add your pgatour.com player page to sync real results.
+        </span>
       </label>
       <label>
         Tours you follow

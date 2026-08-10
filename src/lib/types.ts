@@ -13,6 +13,7 @@ export interface Profile {
   preferred_tours: Tour[]
   career_highlights: string | null
   avatar_url: string | null
+  pga_tour_player_url: string | null
   created_at: string
 }
 
@@ -46,6 +47,18 @@ export interface Commitment {
   // Joined fields, populated client-side
   profile?: Profile
   tournament?: Tournament
+}
+
+export interface TournamentResult {
+  id: string
+  user_id: string
+  tournament_name: string
+  event_date: string | null
+  position: string | null
+  total_score: number | null
+  to_par: string | null
+  earnings: string | null
+  synced_at: string
 }
 
 export interface Message {

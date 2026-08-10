@@ -592,6 +592,49 @@ button[type='submit']:hover:not(:disabled) {
   gap: 16px;
 }
 
+.sync-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.results-table-wrap {
+  overflow-x: auto;
+  margin-bottom: 16px;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: #fff;
+  border: 1px solid var(--sand-200);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.results-table th,
+.results-table td {
+  text-align: left;
+  padding: 10px 14px;
+  white-space: nowrap;
+}
+
+.results-table th {
+  background: var(--sand-100);
+  color: #6b6252;
+  font-weight: 600;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.results-table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid var(--sand-200);
+}
+
 /* ---------------- Messages ---------------- */
 .thread-list {
   display: flex;

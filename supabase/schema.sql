@@ -15,6 +15,7 @@ create table if not exists profiles (
   preferred_tours text[] default '{}', -- e.g. {'PGA','Korn Ferry','Americas'}
   career_highlights text,
   avatar_url text,
+  pga_tour_player_url text,
   created_at timestamptz not null default now()
 );
 
@@ -142,6 +143,40 @@ create policy "Users can update their own avatar"
 create policy "Users can delete their own avatar"
   on storage.objects for delete
   using (bucket_id = 'avatars' and auth.uid()::text = (storage.foldername(name))[1]);
+
+-- ============================================================
+-- TOURNAMENT RESULTS
+-- Real results synced client-side from a user's PGA Tour player
+-- page, keyed to whatever they last pasted into their profile.
+-- ============================================================
+create table if not exists tournament_results (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references profiles(id) on delete cascade,
+  tournament_name text not null,
+  event_date date,
+  position text,
+  total_score int,
+  to_par text,
+  earnings text,
+  synced_at timestamptz not null default now()
+);
+
+alter table tournament_results enable row level security;
+
+create policy "Tournament results are viewable by any signed-in user"
+  on tournament_results for select
+  using (auth.role() = 'authenticated');
+
+create policy "Users can insert their own synced results"
+  on tournament_results for insert
+  with check (auth.uid() = user_id);
+
+create policy "Users can delete their own synced results"
+  on tournament_results for delete
+  using (auth.uid() = user_id);
+
+create index if not exists tournament_results_user_idx
+  on tournament_results (user_id);
 
 -- ============================================================
 -- MESSAGES

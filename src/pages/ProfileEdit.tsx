@@ -21,6 +21,7 @@ export default function ProfileEdit() {
         preferred_tours: values.preferredTours,
         career_highlights: values.careerHighlights || null,
         avatar_url: values.avatarUrl,
+        pga_tour_player_url: values.pgaTourPlayerUrl || null,
       })
       .eq('id', user.id)
 
@@ -44,6 +45,7 @@ export default function ProfileEdit() {
             preferredTours: profile.preferred_tours,
             careerHighlights: profile.career_highlights ?? '',
             avatarUrl: profile.avatar_url,
+            pgaTourPlayerUrl: profile.pga_tour_player_url ?? '',
           }}
           onSubmit={handleSubmit}
           submitLabel="Save changes"

@@ -20,6 +20,7 @@ export default function ProfileSetup() {
       preferred_tours: values.preferredTours,
       career_highlights: values.careerHighlights || null,
       avatar_url: values.avatarUrl,
+      pga_tour_player_url: values.pgaTourPlayerUrl || null,
     })
 
     if (error) return { error: error.message }
@@ -43,6 +44,7 @@ export default function ProfileSetup() {
             preferredTours: [],
             careerHighlights: '',
             avatarUrl: null,
+            pgaTourPlayerUrl: '',
           }}
           onSubmit={handleSubmit}
           submitLabel="Finish setup"
