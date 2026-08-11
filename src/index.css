@@ -400,15 +400,21 @@ button[type='submit']:hover:not(:disabled) {
 
 .post-card-header {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 10px;
+}
+
+.post-card-title {
+  margin: 0;
 }
 
 .post-card-header-right {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .icon-btn {

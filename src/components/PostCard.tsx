@@ -24,6 +24,7 @@ export default function PostCard({
   return (
     <div className="post-card">
       <div className="post-card-header">
+        <h3 className="post-card-title">{post.title || defaultTitle}</h3>
         <div className="post-card-header-right">
           <span className="post-status">{post.status}</span>
           {isOwnPost && (
@@ -77,7 +78,6 @@ export default function PostCard({
         </div>
       </div>
 
-      <h3>{post.title || defaultTitle}</h3>
       <p className="post-meta">
         {post.tournament?.name ?? 'Tournament'} · {post.tournament?.tour} Tour ·{' '}
         {post.tournament?.location}
