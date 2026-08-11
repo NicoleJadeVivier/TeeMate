@@ -66,6 +66,7 @@ create table if not exists posts (
   author_id uuid not null references profiles(id) on delete cascade,
   post_type text not null check (post_type in ('caddie_seeking_player', 'player_seeking_caddie')),
   tournament_id uuid not null references tournaments(id) on delete cascade,
+  title text,
   details text,
   status text not null default 'open' check (status in ('open', 'filled', 'closed')),
   created_at timestamptz not null default now()

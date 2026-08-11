@@ -11,8 +11,9 @@ export default function PostCard({
   currentUserId?: string
   onDeleted?: (postId: string) => void
 }) {
-  const isCaddiePost = post.post_type === 'caddie_seeking_player'
   const isOwnPost = post.author_id === currentUserId
+  const defaultTitle =
+    post.post_type === 'caddie_seeking_player' ? 'Looking for a player' : 'Looking for a caddie'
 
   const handleDelete = async () => {
     if (!window.confirm("Delete this post? This can't be undone.")) return
@@ -23,9 +24,6 @@ export default function PostCard({
   return (
     <div className="post-card">
       <div className="post-card-header">
-        <span className={isCaddiePost ? 'badge badge-caddie' : 'badge badge-player'}>
-          {isCaddiePost ? 'Caddie seeking player' : 'Player seeking caddie'}
-        </span>
         <div className="post-card-header-right">
           <span className="post-status">{post.status}</span>
           {isOwnPost && (
@@ -79,9 +77,10 @@ export default function PostCard({
         </div>
       </div>
 
-      <h3>{post.tournament?.name ?? 'Tournament'}</h3>
+      <h3>{post.title || defaultTitle}</h3>
       <p className="post-meta">
-        {post.tournament?.tour} Tour · {post.tournament?.location}
+        {post.tournament?.name ?? 'Tournament'} · {post.tournament?.tour} Tour ·{' '}
+        {post.tournament?.location}
         {post.tournament?.start_date && (
           <> · {new Date(post.tournament.start_date).toLocaleDateString()}</>
         )}

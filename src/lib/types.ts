@@ -31,6 +31,7 @@ export interface Post {
   author_id: string
   post_type: PostType
   tournament_id: string
+  title: string | null
   details: string | null
   status: PostStatus
   created_at: string

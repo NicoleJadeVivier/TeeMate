@@ -16,11 +16,14 @@ export default function PostForm() {
   // "seeking a player", a player posts "seeking a caddie".
   const defaultPostType: PostType =
     profile?.role === 'player' ? 'player_seeking_caddie' : 'caddie_seeking_player'
+  const defaultTitle = (type: PostType) =>
+    type === 'caddie_seeking_player' ? 'Looking for a player' : 'Looking for a caddie'
 
   const [postType, setPostType] = useState<PostType>(defaultPostType)
   const [tournaments, setTournaments] = useState<Tournament[]>([])
   const [tourFilter, setTourFilter] = useState<Tour | 'all'>('all')
   const [tournamentId, setTournamentId] = useState('')
+  const [title, setTitle] = useState('')
   const [details, setDetails] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
@@ -49,6 +52,7 @@ export default function PostForm() {
         }
         setPostType(data.post_type)
         setTournamentId(data.tournament_id)
+        setTitle(data.title || defaultTitle(data.post_type))
         setDetails(data.details ?? '')
         setLoading(false)
       })
@@ -56,19 +60,20 @@ export default function PostForm() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!user || !tournamentId) return
+    if (!user || !tournamentId || !title.trim()) return
     setError(null)
     setSubmitting(true)
 
     const { error } = isEditing
       ? await supabase
           .from('posts')
-          .update({ tournament_id: tournamentId, details })
+          .update({ tournament_id: tournamentId, title: title.trim(), details })
           .eq('id', postId)
       : await supabase.from('posts').insert({
           author_id: user.id,
           post_type: postType,
           tournament_id: tournamentId,
+          title: title.trim(),
           details,
         })
 
@@ -97,14 +102,17 @@ export default function PostForm() {
 
   return (
     <div className="page page-narrow">
-      <h1>
-        {isEditing
-          ? 'Edit post'
-          : postType === 'caddie_seeking_player'
-            ? 'Post: looking for a player'
-            : 'Post: looking for a caddie'}
-      </h1>
+      <h1>{isEditing ? 'Edit post' : 'New post'}</h1>
       <form onSubmit={handleSubmit} className="auth-form">
+        <label>
+          Title
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g. Need an experienced Korn Ferry caddie for next week"
+            required
+          />
+        </label>
         <label>
           Tour
           <select value={tourFilter} onChange={(e) => setTourFilter(e.target.value as Tour | 'all')}>
@@ -153,14 +161,12 @@ export default function PostForm() {
         </label>
         {error && <p className="form-error">{error}</p>}
         <div className="form-actions">
-          <button type="submit" disabled={submitting || !tournamentId}>
+          <button type="submit" disabled={submitting || !tournamentId || !title.trim()}>
             {submitting ? 'Saving…' : isEditing ? 'Save changes' : 'Post'}
           </button>
-          {isEditing && (
-            <button type="button" className="cancel-btn" onClick={() => navigate('/')}>
-              Cancel
-            </button>
-          )}
+          <button type="button" className="cancel-btn" onClick={() => navigate('/')}>
+            Cancel
+          </button>
         </div>
       </form>
     </div>
