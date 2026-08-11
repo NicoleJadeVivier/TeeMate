@@ -386,6 +386,51 @@ button[type='submit']:hover:not(:disabled) {
   background: #fff;
 }
 
+.search-input {
+  flex: 1;
+  min-width: 160px;
+  border: 1px solid var(--sand-200);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  background: #fff;
+}
+.search-input:focus {
+  outline: 2px solid var(--fairway-500);
+  outline-offset: 1px;
+}
+
+.profile-result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-result-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #fff;
+  border: 1px solid var(--sand-200);
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.profile-result-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-result-name {
+  font-weight: 600;
+  color: var(--fairway-900);
+  text-decoration: none;
+}
+.profile-result-name:hover {
+  text-decoration: underline;
+}
+
 .post-grid {
   display: grid;
   gap: 16px;

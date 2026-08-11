@@ -7,6 +7,7 @@ import ProfileSetup from './pages/ProfileSetup'
 import ProfileEdit from './pages/ProfileEdit'
 import ProfileView from './pages/ProfileView'
 import Feed from './pages/Feed'
+import Search from './pages/Search'
 import PostForm from './pages/PostForm'
 import TourSchedule from './pages/TourSchedule'
 import MessagesList from './pages/MessagesList'
@@ -42,6 +43,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <PostForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/search"
+            element={
+              <ProtectedRoute>
+                <Search />
               </ProtectedRoute>
             }
           />

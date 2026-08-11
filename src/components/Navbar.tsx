@@ -45,6 +45,9 @@ export default function Navbar() {
           <NavLink to="/schedule" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
             Tour schedule
           </NavLink>
+          <NavLink to="/search" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
+            Explore
+          </NavLink>
           <NavLink to="/messages" className={({ isActive }) => (isActive ? 'nav-link active' : 'nav-link')}>
             Messages
           </NavLink>
