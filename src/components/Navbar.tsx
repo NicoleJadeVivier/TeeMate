@@ -53,6 +53,9 @@ export default function Navbar() {
           </NavLink>
         </div>
         <div className="navbar-user">
+          <Link to="/contact" className="nav-link">
+            Contact
+          </Link>
           {profile && (
             <Link to={`/profile/${user?.id}`} className="navbar-name">
               <Avatar url={profile.avatar_url} name={profile.full_name} size={28} />

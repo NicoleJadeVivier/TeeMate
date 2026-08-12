@@ -54,6 +54,9 @@ export default function Login() {
         <p className="auth-switch">
           New to TeeMate? <Link to="/signup">Create an account</Link>
         </p>
+        <p className="auth-switch">
+          Have a question? <Link to="/contact">Contact us</Link>
+        </p>
       </div>
     </div>
   )

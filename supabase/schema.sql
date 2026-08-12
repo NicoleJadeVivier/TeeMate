@@ -237,6 +237,26 @@ create index if not exists messages_thread_created_idx
   on messages (thread_id, created_at);
 
 -- ============================================================
+-- CONTACT MESSAGES
+-- Public contact form submissions. Anyone (logged in or not) can
+-- submit one; there's deliberately no select policy, so only you can
+-- read them, via the Supabase dashboard.
+-- ============================================================
+create table if not exists contact_messages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  message text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table contact_messages enable row level security;
+
+create policy "Anyone can submit a contact message"
+  on contact_messages for insert
+  with check (true);
+
+-- ============================================================
 -- REALTIME
 -- Enable realtime so the Messages page gets new messages live.
 -- ============================================================

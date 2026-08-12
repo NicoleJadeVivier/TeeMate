@@ -56,6 +56,9 @@ export default function Signup() {
         <p className="auth-switch">
           Already have an account? <Link to="/login">Log in</Link>
         </p>
+        <p className="auth-switch">
+          Have a question? <Link to="/contact">Contact us</Link>
+        </p>
       </div>
     </div>
   )

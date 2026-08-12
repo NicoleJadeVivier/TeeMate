@@ -3,6 +3,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import Contact from './pages/Contact'
 import ProfileSetup from './pages/ProfileSetup'
 import ProfileEdit from './pages/ProfileEdit'
 import ProfileView from './pages/ProfileView'
@@ -20,6 +21,7 @@ export default function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/setup-profile" element={<ProfileSetup />} />
 
           <Route
