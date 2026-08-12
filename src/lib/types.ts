@@ -40,6 +40,16 @@ export interface Post {
   tournament?: Tournament
 }
 
+export interface PostComment {
+  id: string
+  post_id: string
+  author_id: string
+  content: string
+  created_at: string
+  // Joined field, populated client-side
+  author?: Profile
+}
+
 export interface Commitment {
   id: string
   user_id: string

@@ -517,6 +517,57 @@ button[type='submit']:hover:not(:disabled) {
   padding-top: 12px;
 }
 
+.comments-toggle {
+  background: none;
+  border: none;
+  color: var(--fairway-700);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 10px 0 0;
+  margin: 0;
+}
+
+.comment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--sand-200);
+}
+
+.comment-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.comment-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--fairway-900);
+  text-decoration: none;
+}
+.comment-author:hover {
+  text-decoration: underline;
+}
+
+.comment-text {
+  font-size: 0.92rem;
+  margin: 2px 0 0;
+}
+
 .post-author {
   font-size: 0.85rem;
   color: #8a806c;

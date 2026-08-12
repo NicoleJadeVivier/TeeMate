@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import PostCard from '../components/PostCard'
-import type { Post, Tour } from '../lib/types'
+import type { Post, PostComment, Tour } from '../lib/types'
 
 const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
 
 export default function Feed() {
   const { user, profile } = useAuth()
   const [posts, setPosts] = useState<Post[]>([])
+  const [commentsByPost, setCommentsByPost] = useState<Record<string, PostComment[]>>({})
   const [loading, setLoading] = useState(true)
   const [tourFilter, setTourFilter] = useState<Tour | 'all'>('all')
   const [typeFilter, setTypeFilter] = useState<'all' | 'caddie_seeking_player' | 'player_seeking_caddie'>(
@@ -28,8 +29,29 @@ export default function Feed() {
       .eq('status', 'open')
       .order('created_at', { ascending: false })
 
-    if (!error && data) setPosts(data as unknown as Post[])
+    const loadedPosts = (data as unknown as Post[]) ?? []
+    if (!error) setPosts(loadedPosts)
+    await loadComments(loadedPosts.map((p) => p.id))
     setLoading(false)
+  }
+
+  const loadComments = async (postIds: string[]) => {
+    if (postIds.length === 0) {
+      setCommentsByPost({})
+      return
+    }
+
+    const { data } = await supabase
+      .from('post_comments')
+      .select('*, author:profiles(*)')
+      .in('post_id', postIds)
+      .order('created_at', { ascending: true })
+
+    const grouped: Record<string, PostComment[]> = {}
+    for (const c of (data as PostComment[] | null) ?? []) {
+      grouped[c.post_id] = [...(grouped[c.post_id] ?? []), c]
+    }
+    setCommentsByPost(grouped)
   }
 
   const handleDeleted = (postId: string) => {
@@ -86,7 +108,13 @@ export default function Feed() {
       ) : (
         <div className="post-grid">
           {filteredPosts.map((post) => (
-            <PostCard key={post.id} post={post} currentUserId={user?.id} onDeleted={handleDeleted} />
+            <PostCard
+              key={post.id}
+              post={post}
+              currentUserId={user?.id}
+              onDeleted={handleDeleted}
+              comments={commentsByPost[post.id] ?? []}
+            />
           ))}
         </div>
       )}
