@@ -112,6 +112,7 @@ export default function Feed() {
               key={post.id}
               post={post}
               currentUserId={user?.id}
+              isAdmin={profile?.is_admin ?? false}
               onDeleted={handleDeleted}
               comments={commentsByPost[post.id] ?? []}
             />

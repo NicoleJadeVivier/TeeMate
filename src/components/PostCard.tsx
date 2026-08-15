@@ -7,15 +7,18 @@ import type { Post, PostComment } from '../lib/types'
 export default function PostCard({
   post,
   currentUserId,
+  isAdmin,
   onDeleted,
   comments,
 }: {
   post: Post
   currentUserId?: string
+  isAdmin?: boolean
   onDeleted?: (postId: string) => void
   comments: PostComment[]
 }) {
   const isOwnPost = post.author_id === currentUserId
+  const canDeletePost = isOwnPost || isAdmin
   const defaultTitle =
     post.post_type === 'caddie_seeking_player' ? 'Looking for a player' : 'Looking for a caddie'
 
@@ -63,52 +66,52 @@ export default function PostCard({
         <div className="post-card-header-right">
           <span className="post-status">{post.status}</span>
           {isOwnPost && (
-            <>
-              <Link
-                to={`/posts/${post.id}/edit`}
-                className="icon-btn"
-                aria-label="Edit post"
-                title="Edit post"
+            <Link
+              to={`/posts/${post.id}/edit`}
+              className="icon-btn"
+              aria-label="Edit post"
+              title="Edit post"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 20h9" />
-                  <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
-                </svg>
-              </Link>
-              <button
-                type="button"
-                className="icon-btn"
-                onClick={handleDelete}
-                aria-label="Delete post"
-                title="Delete post"
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z" />
+              </svg>
+            </Link>
+          )}
+          {canDeletePost && (
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={handleDelete}
+              aria-label="Delete post"
+              title={isOwnPost ? 'Delete post' : 'Delete post (admin)'}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="3 6 5 6 21 6" />
-                  <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                  <path d="M10 11v6" />
-                  <path d="M14 11v6" />
-                  <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                </svg>
-              </button>
-            </>
+                <polyline points="3 6 5 6 21 6" />
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                <path d="M10 11v6" />
+                <path d="M14 11v6" />
+                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+              </svg>
+            </button>
           )}
         </div>
       </div>
@@ -159,13 +162,13 @@ export default function PostCard({
                   <Link to={`/profile/${c.author_id}`} className="comment-author">
                     {c.author?.full_name ?? 'Unknown'}
                   </Link>
-                  {c.author_id === currentUserId && (
+                  {(c.author_id === currentUserId || isAdmin) && (
                     <button
                       type="button"
                       className="icon-btn"
                       onClick={() => handleDeleteComment(c.id)}
                       aria-label="Delete comment"
-                      title="Delete comment"
+                      title={c.author_id === currentUserId ? 'Delete comment' : 'Delete comment (admin)'}
                     >
                       <svg
                         width="14"

@@ -16,6 +16,7 @@ create table if not exists profiles (
   career_highlights text,
   avatar_url text,
   pga_tour_player_url text,
+  is_admin boolean not null default false,
   created_at timestamptz not null default now()
 );
 
@@ -86,9 +87,12 @@ create policy "Users can update their own posts"
   on posts for update
   using (auth.uid() = author_id);
 
-create policy "Users can delete their own posts"
+create policy "Users can delete their own posts or admins can delete any"
   on posts for delete
-  using (auth.uid() = author_id);
+  using (
+    auth.uid() = author_id
+    or exists (select 1 from profiles where id = auth.uid() and is_admin = true)
+  );
 
 -- ============================================================
 -- POST COMMENTS
@@ -111,9 +115,12 @@ create policy "Users can add comments as themselves"
   on post_comments for insert
   with check (auth.uid() = author_id);
 
-create policy "Users can delete their own comments"
+create policy "Users can delete their own comments or admins can delete any"
   on post_comments for delete
-  using (auth.uid() = author_id);
+  using (
+    auth.uid() = author_id
+    or exists (select 1 from profiles where id = auth.uid() and is_admin = true)
+  );
 
 create index if not exists post_comments_post_idx
   on post_comments (post_id, created_at);
