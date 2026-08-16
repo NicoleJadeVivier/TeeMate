@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
-import type { Commitment, Role, Tour, Tournament } from '../lib/types'
+import type { Commitment, QSchoolStage, Role, Tour, Tournament } from '../lib/types'
 
-const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
+const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas', 'Q-School']
+const QSCHOOL_STAGES: QSchoolStage[] = ['Pre-Qualifying', 'First Stage', 'Second Stage', 'Final Stage']
 
 export default function TourSchedule() {
   const { user } = useAuth()
   const [tour, setTour] = useState<Tour>('PGA')
+  const [stageFilter, setStageFilter] = useState<QSchoolStage | 'all'>('all')
   const [tournaments, setTournaments] = useState<Tournament[]>([])
   const [commitmentsByTournament, setCommitmentsByTournament] = useState<
     Record<string, Commitment[]>
@@ -168,6 +170,12 @@ export default function TourSchedule() {
   const upcoming = tournaments.filter((t) => new Date(t.end_date) >= today)
   const past = tournaments.filter((t) => new Date(t.end_date) < today).reverse()
 
+  const visibleStages =
+    stageFilter === 'all' ? QSCHOOL_STAGES : QSCHOOL_STAGES.filter((s) => s === stageFilter)
+  const stageSections = visibleStages
+    .map((stage) => ({ stage, stageTournaments: tournaments.filter((t) => t.stage === stage) }))
+    .filter((s) => s.stageTournaments.length > 0)
+
   return (
     <div className="page">
       <div className="page-header">
@@ -182,12 +190,35 @@ export default function TourSchedule() {
           <button
             key={t}
             className={tour === t ? 'tab active' : 'tab'}
-            onClick={() => setTour(t)}
+            onClick={() => {
+              setTour(t)
+              setStageFilter('all')
+            }}
           >
             {t}
           </button>
         ))}
       </div>
+
+      {tour === 'Q-School' && (
+        <div className="tab-bar stage-filter-bar">
+          <button
+            className={stageFilter === 'all' ? 'tab active' : 'tab'}
+            onClick={() => setStageFilter('all')}
+          >
+            All stages
+          </button>
+          {QSCHOOL_STAGES.map((s) => (
+            <button
+              key={s}
+              className={stageFilter === s ? 'tab active' : 'tab'}
+              onClick={() => setStageFilter(s)}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
 
       {loading ? (
         <p className="empty-state">Loading schedule…</p>
@@ -196,6 +227,17 @@ export default function TourSchedule() {
           No {tour} events loaded yet. Add rows to the <code>tournaments</code> table in Supabase
           to populate this schedule.
         </p>
+      ) : tour === 'Q-School' ? (
+        stageSections.length === 0 ? (
+          <p className="empty-state">No Q-School events for that stage yet.</p>
+        ) : (
+          stageSections.map(({ stage, stageTournaments }) => (
+            <div key={stage}>
+              <h2 className="section-heading">{stage}</h2>
+              <div className="schedule-list">{stageTournaments.map(renderRow)}</div>
+            </div>
+          ))
+        )
       ) : (
         <>
           <h2 className="section-heading">Upcoming</h2>

@@ -44,11 +44,17 @@ create policy "Users can update their own profile"
 create table if not exists tournaments (
   id uuid primary key default gen_random_uuid(),
   name text not null,
-  tour text not null check (tour in ('PGA', 'Korn Ferry', 'Americas')),
+  tour text not null check (tour in ('PGA', 'Korn Ferry', 'Americas', 'Q-School')),
   location text not null,
   start_date date not null,
   end_date date not null,
-  created_at timestamptz not null default now()
+  -- Only set for tour = 'Q-School'; null for the other three tours.
+  stage text check (stage is null or stage in ('Pre-Qualifying', 'First Stage', 'Second Stage', 'Final Stage')),
+  created_at timestamptz not null default now(),
+  -- Lets the schedule scraper upsert in place instead of deleting and
+  -- recreating rows, since deleting a tournament cascades to delete any
+  -- posts/comments/commitments attached to it.
+  unique (name, tour, start_date)
 );
 
 alter table tournaments enable row level security;

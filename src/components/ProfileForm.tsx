@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Avatar from './Avatar'
 import type { Role, Tour } from '../lib/types'
 
-const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
+const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas', 'Q-School']
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024
 
 export interface ProfileFormValues {

@@ -606,6 +606,19 @@ button[type='submit']:hover:not(:disabled) {
   color: #fff;
 }
 
+.stage-filter-bar {
+  margin-top: -12px;
+  flex-wrap: wrap;
+}
+.stage-filter-bar .tab {
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+.stage-filter-bar .tab.active {
+  background: var(--fairway-700);
+  border-color: var(--fairway-700);
+}
+
 .section-heading {
   font-size: 1rem;
   text-transform: uppercase;

@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import PostCard from '../components/PostCard'
 import type { Post, PostComment, Tour } from '../lib/types'
 
-const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
+const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas', 'Q-School']
 
 export default function Feed() {
   const { user, profile } = useAuth()

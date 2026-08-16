@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useAuth } from '../contexts/AuthContext'
 import type { PostType, Tour, Tournament } from '../lib/types'
 
-const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
+const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas', 'Q-School']
 
 export default function PostForm() {
   const { user, profile } = useAuth()

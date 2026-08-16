@@ -1,5 +1,6 @@
 export type Role = 'caddie' | 'player'
-export type Tour = 'PGA' | 'Korn Ferry' | 'Americas'
+export type Tour = 'PGA' | 'Korn Ferry' | 'Americas' | 'Q-School'
+export type QSchoolStage = 'Pre-Qualifying' | 'First Stage' | 'Second Stage' | 'Final Stage'
 export type PostType = 'caddie_seeking_player' | 'player_seeking_caddie'
 export type PostStatus = 'open' | 'filled' | 'closed'
 
@@ -25,6 +26,7 @@ export interface Tournament {
   location: string
   start_date: string
   end_date: string
+  stage: QSchoolStage | null
 }
 
 export interface Post {

@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext'
 import Avatar from '../components/Avatar'
 import type { Profile, Role, Tour } from '../lib/types'
 
-const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas']
+const ALL_TOURS: Tour[] = ['PGA', 'Korn Ferry', 'Americas', 'Q-School']
 
 export default function Search() {
   const { user } = useAuth()
